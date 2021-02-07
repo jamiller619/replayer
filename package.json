@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "concurrently --kill-others --success first --raw \"npm run web-dev\" \"npm run app-dev\"",
     "web-dev": "parcel ./src/main/index.html -d dist/dev",
-    "web": "rm -f dist/dev/* && parcel ./src/main/index.html -d dist/dev",
     "app-dev": "ELECTRON_START_URL=http://localhost:1234 electron ."
   },
   "browserslist": [
@@ -23,6 +22,9 @@
     "concurrently": "^5.3.0",
     "electron": "^11.2.2",
     "electron-store": "^7.0.1",
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-react": "^7.22.0",
     "parcel-bundler": "^1.12.4",
     "prettier": "^2.2.1"
   }
