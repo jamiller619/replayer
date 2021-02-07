@@ -1,0 +1,16 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Project specific
+dist/
+.cache
+.parcel-cache
+.yarn-integrity
+.env
+
+# General
+node_modules/
