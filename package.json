@@ -1,14 +1,14 @@
 {
   "name": "replayer",
   "version": "1.0.0",
-  "main": "src/main.js",
+  "main": "src/main/main.js",
   "author": "Jeff Miller",
   "license": "MIT",
   "private": false,
   "scripts": {
     "dev": "concurrently --kill-others --success first --raw \"npm run web-dev\" \"npm run app-dev\"",
-    "web-dev": "parcel ./src/index.html -d dist/dev",
-    "web": "rm -f dist/dev/* && parcel ./src/index.html -d dist/dev",
+    "web-dev": "parcel ./src/main/index.html -d dist/dev",
+    "web": "rm -f dist/dev/* && parcel ./src/main/index.html -d dist/dev",
     "app-dev": "ELECTRON_START_URL=http://localhost:1234 electron ."
   },
   "browserslist": [
@@ -22,6 +22,8 @@
   "devDependencies": {
     "concurrently": "^5.3.0",
     "electron": "^11.2.2",
-    "parcel-bundler": "^1.12.4"
+    "electron-store": "^7.0.1",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^2.2.1"
   }
 }
