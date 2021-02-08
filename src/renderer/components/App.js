@@ -1,5 +1,5 @@
 import React from 'react'
-import useStore from '../useStore'
+import { useStore } from '../store'
 
 const { dialog } = window.app
 
@@ -11,7 +11,9 @@ const dialogOptions = {
 }
 
 const App = () => {
-  const [{ replayFolderPath }, setStore] = useStore()
+  const [{ replayFolderPath, lastRun, replayFileStats }, setStore] = useStore()
+
+  const replayCount = replayFileStats.length
 
   const handleFolderPathDialog = async () => {
     const dialogResponse = await dialog.showOpenDialog(dialogOptions)
@@ -25,11 +27,29 @@ const App = () => {
     }
   }
 
+  const handleParseReplays = async () => {
+    const replays = await window.app.parseAllReplays()
+
+    console.log(replays)
+  }
+
   return (
     <div>
-      {!replayFolderPath && (
+      {
         <button type="button" onClick={handleFolderPathDialog}>
-          Add Replay folder
+          {replayFolderPath ? 'Change' : 'Add'} Replay folder
+        </button>
+      }
+      <br />
+      <br />
+      <div>Replays last run: {lastRun ? lastRun : 'Never'}</div>
+      <div>
+        Replays since last run: {replayCount > 0 ? replayCount : 'None'}
+      </div>
+      <br />
+      {replayFolderPath && replayCount > 0 && (
+        <button type="button" onClick={handleParseReplays}>
+          Parse Replays
         </button>
       )}
     </div>

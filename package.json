@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "dev": "concurrently --kill-others --success first --raw \"npm run web-dev\" \"npm run app-dev\"",
+    "dev": "concurrently --kill-others --success first --raw \"npm run app-dev\" \"npm run web-dev\"",
     "web-dev": "parcel ./src/main/index.html -d dist/dev",
     "app-dev": "ELECTRON_START_URL=http://localhost:1234 electron ."
   },
@@ -19,6 +19,7 @@
     "react-dom": "^17.0.1"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "concurrently": "^5.3.0",
     "electron": "^11.2.2",
     "electron-store": "^7.0.1",

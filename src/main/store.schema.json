@@ -1,4 +1,15 @@
 {
+  "lastRun": {
+    "type": "string"
+  },
+  "parsedReplays": {
+    "type": "array",
+    "default": []
+  },
+  "replayFileStats": {
+    "type": "array",
+    "default": []
+  },
   "replayFolderPath": {
     "type": "string"
   }
