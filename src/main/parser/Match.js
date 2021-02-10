@@ -1,4 +1,5 @@
-const { ref } = require('./utils')
+const ref = require('./ref')
+const mapTypes = require('./mapTypes')
 const Player = require('./Player')
 
 const parseDate = (str) => {
@@ -10,7 +11,7 @@ const parseDate = (str) => {
     if (parts.length > 1) {
       const t = parts[1].replaceAll('-', ':')
 
-      return Date.parse(d + ' ' + t)
+      return Date.parse(`${d} ${t}`)
     }
 
     return Date.parse(d)
@@ -19,12 +20,12 @@ const parseDate = (str) => {
   return null
 }
 
-const getMatchLength = (fps, frameCount) => {
+const getMatchDuration = (fps, frameCount) => {
   const num = frameCount / fps
   const minutes = Math.floor(num / 60)
   const seconds = Math.floor(num % 60)
 
-  return `${minutes}:${seconds}`
+  return minutes * 60 + seconds
 }
 
 class Match {
@@ -45,16 +46,19 @@ class Match {
     this.id = ref(body, 'Id.value.str')
     this.name = ref(body, 'ReplayName.value.str')
     this.type = ref(body, 'MatchType.value.name')
-    this.mapName = ref(body, 'MapName.value.name')
     this.team0Score = ref(body, 'Team0Score.value.int')
     this.team1Score = ref(body, 'Team1Score.value.int')
     this.date = parseDate(ref(body, 'Date.value.str'))
     this.teamSize = ref(body, 'TeamSize.value.int')
 
+    const map = ref(body, 'MapName.value.name')
+
+    this.mapName = map && mapTypes[map] ? mapTypes[map] : null
+
     const fps = ref(body, 'RecordFPS.value.float')
     const frameCount = ref(body, 'NumFrames.value.int')
 
-    this.length = fps && frameCount ? getMatchLength(fps, frameCount) : null
+    this.duration = fps && frameCount ? getMatchDuration(fps, frameCount) : null
 
     const playerData = ref(body, 'PlayerStats.value.array')
 

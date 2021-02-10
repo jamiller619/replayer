@@ -1,4 +1,4 @@
-const { ref } = require('./utils')
+const ref = require('./ref')
 
 const getPlatform = (platforms) => {
   const searchStr = 'OnlinePlatform_'

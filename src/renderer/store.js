@@ -1,25 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const getStore = () => window.app.store
 const getStoreData = () => getStore().store
 
 const useStore = () => {
-  const [state, setState] = useState(getStoreData())
+  const [, setState] = useState(getStoreData())
+
+  useEffect(() => {
+    return getStore().onDidAnyChange((newStore) => {
+      setState({ ...newStore.store })
+    })
+  }, [])
 
   const setStore = (updatedState) => {
-    setState((prevState) => {
-      const newState = {
-        ...prevState,
-        ...updatedState,
-      }
+    const newState = {
+      ...getStoreData(),
+      ...updatedState,
+    }
 
-      getStore().set(newState)
+    getStore().set(newState)
 
-      return newState
-    })
+    return newState
   }
 
-  return [state, setStore]
+  return [getStoreData(), setStore]
 }
 
 export { useStore, getStoreData as getStore }

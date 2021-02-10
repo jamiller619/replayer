@@ -12,17 +12,28 @@ window.app = {
   store: new Store({ schema }),
 }
 
-const parseAndStoreReplay = async (replayFilePath) => {
-  const { store } = window.app
-  const parsedReplay = await Parser.parse(replayFilePath)
+const getStore = () => window.app.store
 
-  store.set('parsedReplays', [...store.get('parsedReplays'), parsedReplay])
-
-  return parsedReplay
+const findById = (id) => {
+  return getStore()
+    .get('parsedReplays')
+    .find((r) => r.id === id)
 }
 
-window.app.parseAllReplays = () => {
-  const { store } = window.app
+const parseAndStoreReplay = async (replayFilePath) => {
+  const store = getStore()
+  const parsedReplay = await Parser.parse(replayFilePath)
+  const existingReplay = findById(parsedReplay.id)
+
+  if (!existingReplay) {
+    store.set('parsedReplays', [...store.get('parsedReplays'), parsedReplay])
+  }
+
+  return existingReplay || parsedReplay
+}
+
+const parseReplays = () => {
+  const store = getStore()
   const replays = store.get('replayFileStats')
   const dir = store.get('replayFolderPath')
 
@@ -33,8 +44,16 @@ window.app.parseAllReplays = () => {
   })
 }
 
+window.app.parseReplays = async () => {
+  const replays = await parseReplays()
+
+  getStore().set('lastRun', Date.now().toString())
+
+  return replays
+}
+
 const addFileToStore = (filename, dir) => {
-  const { store } = window.app
+  const store = getStore()
   const file = {
     name: filename,
     ...fs.statSync(path.join(dir, filename)),

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useStore } from '../store'
+import MatchOverview from './MatchOverview'
 
 const { dialog } = window.app
 
@@ -11,7 +12,10 @@ const dialogOptions = {
 }
 
 const App = () => {
-  const [{ replayFolderPath, lastRun, replayFileStats }, setStore] = useStore()
+  const [
+    { replayFolderPath, lastRun, replayFileStats, parsedReplays },
+    setStore,
+  ] = useStore()
 
   const replayCount = replayFileStats.length
 
@@ -27,10 +31,12 @@ const App = () => {
     }
   }
 
-  const handleParseReplays = async () => {
-    const replays = await window.app.parseAllReplays()
+  const handleParseReplays = () => {
+    window.app.parseReplays()
+  }
 
-    console.log(replays)
+  const handleReset = () => {
+    window.app.store.reset('parsedReplays')
   }
 
   return (
@@ -52,6 +58,16 @@ const App = () => {
           Parse Replays
         </button>
       )}
+      <br />
+      <br />
+      <div>Parsed Replays: {parsedReplays.length}</div>
+      <button type="button" onClick={handleReset}>
+        Reset
+      </button>
+      <br />
+      {parsedReplays.map((replay) => (
+        <MatchOverview key={replay.id} {...replay} />
+      ))}
     </div>
   )
 }
